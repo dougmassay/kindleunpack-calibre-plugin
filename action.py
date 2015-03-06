@@ -253,7 +253,7 @@ class InterfacePlugin(InterfaceAction):
         # self.gui.library_view.model().books_added(len(ids_to_highlight))
         # self.gui.library_view.model().refresh()
         # self.gui.tags_view.recount()
-        self.gui.library_view.model().set_highlight_only(True)
+        # self.gui.library_view.model().set_highlight_only(True)
         self.gui.library_view.select_rows(ids_to_highlight)
         return
 
