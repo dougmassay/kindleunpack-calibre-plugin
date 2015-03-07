@@ -6,13 +6,12 @@ from __future__ import (unicode_literals, division, absolute_import,
                         print_function)
 
 import os
-import sys
 import re
 import shutil
 import inspect
-import zipfile
 import patch
-from zipfile import ZipFile
+import zipfile
+
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 KU_DIR = os.path.join(SCRIPT_DIR, 'kindleunpack')
@@ -43,7 +42,7 @@ def zipUpDir(myzip, tdir, localname):
             myzip.write(realfilePath, localfilePath, zipfile.ZIP_DEFLATED)
         elif os.path.isdir(realfilePath):
             zipUpDir(myzip, tdir, localfilePath)
-            
+
 def findVersion():
     pattern = r'PLUGIN_VERSION_TUPLE = \((\d+),\s?(\d+),\s?(\d+)\)'
     with open('__init__.py', 'r') as fd:
@@ -70,7 +69,7 @@ shutil.copytree(CORE_LIB_DIR, KU_DIR)
 
 # Patch kindleunpack.py
 parsedPatchSet = patch.fromfile('ku.patch')
-if not parsedPatchSet == False:
+if parsedPatchSet is not False:
     if parsedPatchSet.apply():
         print(parsedPatchSet.diffstat())
     else:
@@ -78,7 +77,6 @@ if not parsedPatchSet == False:
 else:
     print ('Cannot patch necessary file!')
 
-    
 files = os.listdir(SCRIPT_DIR)
 outzip = zipfile.ZipFile(PLUGIN_NAME, 'w')
 for entry in files:
