@@ -1,0 +1,29 @@
+--- ./kindleunpack.py
++++ ./kindleunpack/kindleunpack.py
+@@ -4,10 +4,10 @@
+ 
+ from __future__ import unicode_literals, division, absolute_import, print_function
+ 
+-__path__ = ["lib", ".", "kindleunpack"]
++#__path__ = ["lib", ".", "kindleunpack"]
+ 
+ import sys
+-import codecs
++#import codecs
+ import traceback
+ 
+ from .compatibility_utils import PY2, binary_type, utf8_str, unicode_str
+@@ -22,11 +22,13 @@
+     range = xrange
+     # since will be printing unicode under python 2 need to protect
+     # against sys.stdout.encoding being None stupidly forcing forcing ascii encoding
++    '''
+     if sys.stdout.encoding is None:
+         sys.stdout = codecs.getwriter("utf-8")(sys.stdout)
+     else:
+         encoding = sys.stdout.encoding
+         sys.stdout = codecs.getwriter(encoding)(sys.stdout)
++    '''
+ 
+ # Changelog
+ #  0.11 - Version by adamselene
