@@ -58,6 +58,21 @@ The core plugin files (this is where most contributors will spend their time):
     > mobi_stuff.py
     > utilities.py
 
+It's important to note that any import statements in the above files that look like:
+   
+    from calibre_plugins.kindleunpack_plugin.kindleunpack.blah import blah
+
+are actually referring to a 'blah' module / script in the core_subtree/lib directory.
+These imports will only "work" in the context of a calibre plugin's structure and the calibre
+environment. If you need to refer to or call those modules that's where they'll be. 
+But as mentioned above ... go upstream if you have patches or pull requests for those files.
+
+For example, if you need to import something from the core_subtree/lib/compatibility_utils.py
+script, you would use:
+
+    from calibre_plugins.kindleunpack_plugin.kindleunpack.compatibility_utils import mobi_split
+
+
 Files used for building/maintaining the plugin:
 
     > setup.py  -- this is used to configure/build the plugin.
@@ -87,7 +102,7 @@ KindleUnpack (https://github.com/kevinhendricks/KindleUnpack)
 python-patch (https://code.google.com/p/python-patch/)
 
     Copyright © 2008-2012 anatoly techtonik
-    Available under the terms of [MIT license](http://opensource.org/licenses/mit-license.php)
+    Available under the terms of the MIT license (http://opensource.org/licenses/mit-license.php)
 
 
 
