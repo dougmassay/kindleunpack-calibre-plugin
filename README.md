@@ -22,18 +22,17 @@ To build the plugin, clone the repo, cd into it and run the setup.py script with
 
 This will create the plugin's zip file by copying/patching the files it needs to function.
 
-You can also add a '-d (or --debug) option to setup.py. If calibre is installed and on your
+You can also add a -d (or --debug) option to setup.py. If calibre is installed and on your
 path and you add the '-d' option, setup.py will attempt to:
 
     1) close calibre if it's open
     2) install the plugin using calibre-customize
     3) relaunch calibre in debug-mode
 
-    $ python setup.py -d
-
 If all goes well, the plugin can now be run and any debug print statements/errors should print
 to the terminal. If you have a complex calibre setup (or it's not on you path), you may need to
 install the plugin manually to debug.
+
 
 Contributing / Modifying
 ============
@@ -41,13 +40,13 @@ From here on out, a proficiency with developing / creating calibre plugins is as
 If you need a crash-course, an introduction to creating calibre plugins is available at
 http://manual.calibre-ebook.com/creating_plugins.html.
 
-
 The core_subtree/ directory is a subtree representing the entire python2and3 branch of KindleUnpack -- the
 python software the plugin is based upon. No pull-requests or patches will be accepted for any of
 its contents. If you have modifications to suggest for those files, do so upstream at https://github.com/kevinhendricks/KindleUnpack.
-Any changes there will eventually be pulled into this repository.
+Any changes there will eventually be pulled into this repository. The plugin only uses files from
+the lib subdirectory of core_subtree.
 
-The core plugin files (this is where most contributors will spend their time):
+The core plugin files (this is where most contributors will spend their time) are:
 
     > images/explode3.png
     > __init__.py
@@ -67,10 +66,15 @@ These imports will only "work" in the context of a calibre plugin's structure an
 environment. If you need to refer to or call those modules that's where they'll be. 
 But as mentioned above ... go upstream if you have patches or pull requests for those files.
 
-For example, if you need to import something from the core_subtree/lib/compatibility_utils.py
-script, you would use:
+For example, if you need to import something from the core_subtree/lib/ directory (for example: 
+compatibility_utils.py), you would use:
 
-    from calibre_plugins.kindleunpack_plugin.kindleunpack.compatibility_utils import mobi_split
+    from calibre_plugins.kindleunpack_plugin.kindleunpack.compatibility_utils import PY2
+
+the rest of the scripts above (dialogs.py, etc...) can be imported using the prefix of:
+
+    calibre_plugins.kindleunpack_plugin.
+
 
 
 Files used for building/maintaining the plugin:
