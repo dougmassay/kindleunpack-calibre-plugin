@@ -59,7 +59,8 @@ License Information
 =======
 
 KindleUnpack the Calibre Plugin
-   Licensed under the GPLv3.
+
+    Licensed under the GPLv3.
 
 KindleUnpack (https://github.com/kevinhendricks/KindleUnpack)
 
