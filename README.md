@@ -30,12 +30,13 @@ If you need a crash-course, an introduction to creating calibre plugins is avail
 http://manual.calibre-ebook.com/creating_plugins.html.
 
 
-The core_subtree/ directory is a subtree representing the entire python2and3 branch of KindleUnpack--the
-python software the plugin s based upon. No pull-requests or patches will be accepted for any of
+The core_subtree/ directory is a subtree representing the entire python2and3 branch of KindleUnpack -- the
+python software the plugin is based upon. No pull-requests or patches will be accepted for any of
 its contents. If you have modifications to suggest for those files, do so upstream https://github.com/kevinhendricks/KindleUnpack.
 Any changes there will eventually be pulled into this repository.
 
 The core plugin files (this is where most contributors will spend their time):
+
     > images/explode3.png
     > __init__.py
     > action.py
@@ -46,6 +47,7 @@ The core plugin files (this is where most contributors will spend their time):
     > utilities.py
 
 Files used for building/maintaining the plugin:
+
     > setup.py  -- this is used to configure/build the plugin.
     > setup.cfg -- used for flake8 style checking. Use it to see if your code complies.
     > patch.py  -- used by setup.py to apply patches to upstream files if necessary. 
