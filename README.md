@@ -1,4 +1,4 @@
-KindleUnpack the Calibre Plugin
+KindleUnpack the calibre Plugin
 ============
 
 A calibre plugin based/wrapped around the KindleUnpack software. 
@@ -32,7 +32,7 @@ http://manual.calibre-ebook.com/creating_plugins.html.
 
 The core_subtree/ directory is a subtree representing the entire python2and3 branch of KindleUnpack -- the
 python software the plugin is based upon. No pull-requests or patches will be accepted for any of
-its contents. If you have modifications to suggest for those files, do so upstream https://github.com/kevinhendricks/KindleUnpack.
+its contents. If you have modifications to suggest for those files, do so upstream at https://github.com/kevinhendricks/KindleUnpack.
 Any changes there will eventually be pulled into this repository.
 
 The core plugin files (this is where most contributors will spend their time):
@@ -62,14 +62,16 @@ KindleUnpack the Calibre Plugin
    Licensed under the GPLv3.
 
 KindleUnpack (https://github.com/kevinhendricks/KindleUnpack)
+
     Based on initial mobipocket version Copyright © 2009 Charles M. Hannum <root@ihack.net>
     Extensive Extensions and Improvements Copyright © 2009-2014 
-         By P. Durrant, K. Hendricks, S. Siebert, fandrieu, DiapDealer, nickredding, tkeo.
+    By P. Durrant, K. Hendricks, S. Siebert, fandrieu, DiapDealer, nickredding, tkeo.
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, version 3.
 
 python-patch (https://code.google.com/p/python-patch/)
+
     Copyright © 2008-2012 anatoly techtonik
     Available under the terms of [MIT license](http://opensource.org/licenses/mit-license.php)
 
