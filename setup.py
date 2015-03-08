@@ -11,9 +11,8 @@ import re
 import glob
 import shutil
 import inspect
-import patch
+import pythonpatch
 import zipfile
-import shlex
 from subprocess import Popen, PIPE, STDOUT
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -45,9 +44,8 @@ VERS_INFO =  findVersion()
 PLUGIN_NAME = os.path.join(SCRIPT_DIR, 'kindle_unpack_v{}_plugin.zip'.format(VERS_INFO))
 
 
-def calibreWrapper(cmd):
-    parsed_cmd = shlex.split(cmd)
-    process = Popen(parsed_cmd, stdout=PIPE, stderr=STDOUT)
+def calibreWrapper(*cmd):
+    process = Popen(list(cmd), stdout=PIPE, stderr=STDOUT)
 
     # Poll process for new output until finished
     while True:
@@ -112,14 +110,16 @@ if __name__ == "__main__":
 
     # Patch kindleunpack.py
     print ('Attempting to patch upstream file(s) ...')
-    parsedPatchSet = patch.fromfile('ku.patch')
-    if parsedPatchSet is not False:
-        if parsedPatchSet.apply():
-            print(parsedPatchSet.diffstat())
+    patchfiles = glob.glob('*.patch')
+    for patch in patchfiles:
+        parsedPatchSet = pythonpatch.fromfile(patch)
+        if parsedPatchSet is not False:
+            if parsedPatchSet.apply():
+                print(parsedPatchSet.diffstat())
+            else:
+                sys.exit('Cannot patch upstream file(s)!')
         else:
             sys.exit('Cannot patch upstream file(s)!')
-    else:
-        sys.exit('Cannot patch upstream file(s)!')
 
     print ('Creating {} ...'.format(os.path.basename(PLUGIN_NAME)))
     files = os.listdir(SCRIPT_DIR)
@@ -140,6 +140,9 @@ if __name__ == "__main__":
     if options.debugmode:
         print('\nAttempting to install plugin and launch calibre ...')
         print('If successful, debug output should print to terminal.')
-        result = calibreWrapper('calibre-debug -s')
-        result = calibreWrapper('calibre-customize -a {}'.format(PLUGIN_NAME))
-        result = calibreWrapper('calibre-debug -g')
+        args= ['calibre-debug', '-s']
+        result = calibreWrapper(*args)
+        args= ['calibre-customize', '-a', PLUGIN_NAME]
+        result = calibreWrapper(*args)
+        args= ['calibre-debug', '-g']
+        result = calibreWrapper(*args)

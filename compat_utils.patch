@@ -1,0 +1,35 @@
+--- ./compatibility_utils.py
++++ ./kindleunpack/compatibility_utils.py
+@@ -39,14 +39,6 @@
+     from urllib.parse import unquote
+ except ImportError:
+     from urllib import unquote
+-
+-try:
+-    import html
+-except ImportError:
+-    from HTMLParser import HTMLParser
+-
+-if PY2:
+-    _h = HTMLParser()
+ 
+ if PY3:
+     text_type = str
+@@ -215,8 +207,15 @@
+ # unescape html
+ def unescapeit(sval):
+     if PY2:
+-        return _h.unescape(sval)
+-    return html.unescape(sval)
++        from HTMLParser import HTMLParser
++        return HTMLParser().unescape(sval)
++    else:
++        if sys.version_info[1] < 4:
++            import html.parser
++            return html.parser.HTMLParser().unescape(sval)
++        else:
++            import html
++            return html.unescape(sval)
+ 
+ # Python 2.X commandline parsing under Windows has been horribly broken for years!
+ # Use the following code to emulate full unicode commandline parsing on Python 2

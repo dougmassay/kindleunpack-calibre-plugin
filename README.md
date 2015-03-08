@@ -21,7 +21,19 @@ To build the plugin, clone the repo, cd into it and run the setup.py script with
     $ python setup.py
 
 This will create the plugin's zip file by copying/patching the files it needs to function.
-At this point, the plugin can be installed using calibre's standard preferences/plugin interface.
+
+You can also add a '-d (or --debug) option to setup.py. If calibre is installed and on your
+path and you add the '-d' option, setup.py will attempt to:
+
+    1) close calibre if it's open
+    2) install the plugin using calibre-customize
+    3) relaunch calibre in debug-mode
+
+    $ python setup.py -d
+
+If all goes well, the plugin can now be run and any debug print statements/errors should print
+to the terminal. If you have a complex calibre setup (or it's not on you path), you may need to
+install the plugin manually to debug.
 
 Contributing / Modifying
 ============
@@ -50,8 +62,9 @@ Files used for building/maintaining the plugin:
 
     > setup.py  -- this is used to configure/build the plugin.
     > setup.cfg -- used for flake8 style checking. Use it to see if your code complies.
-    > patch.py  -- used by setup.py to apply patches to upstream files if necessary. 
+    > pythonpatch.py  -- used by setup.py to apply patches to upstream files if necessary. 
     > ku.patch  -- patch that setup.py will apply to a temp copy of the upstream kindleunpack.py file.
+    > compat_utils.patch  -- patch for the upstream compatibilities.py file.
 
 
 
