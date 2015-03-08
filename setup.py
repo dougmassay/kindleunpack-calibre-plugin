@@ -8,12 +8,21 @@ from __future__ import (unicode_literals, division, absolute_import,
 import os
 import sys
 import re
+import codecs
 import glob
 import shutil
 import inspect
 import pythonpatch
 import zipfile
 from subprocess import Popen, PIPE, STDOUT
+
+
+try:
+    codecs.lookup('cp65001')
+except LookupError:
+    codecs.register(
+        lambda name: name == 'cp65001' and codecs.lookup('utf-8') or None)
+
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 KU_DIR = os.path.join(SCRIPT_DIR, 'kindleunpack')
