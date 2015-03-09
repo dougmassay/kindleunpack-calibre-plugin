@@ -144,7 +144,7 @@ if __name__ == "__main__":
     print ('Plugin successfully created!')
 
     print('Removing temporary \'kindleunpack\' directory ...')
-    removePreviousKU()
+    #removePreviousKU()
 
     if options.debugmode:
         print('\nAttempting to install plugin and launch calibre ...')
