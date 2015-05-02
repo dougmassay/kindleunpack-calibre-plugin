@@ -106,7 +106,7 @@ if __name__ == "__main__":
     opt = OptionParser(usage='python %prog [options]')
     opt.add_option('-d', '--debug', action='store_true', dest='debugmode', help='Install/debug plugin using calibre')
     (options, args) = opt.parse_args()
-    
+
     print('Removing any previous build leftovers ...')
     removePreviousKU(rmzip=True)
 
@@ -140,7 +140,7 @@ if __name__ == "__main__":
         elif os.path.isdir(filepath) and entry in PLUGIN_DIRS:
             zipUpDir(outzip, SCRIPT_DIR, entry)
     outzip.close()
-    
+
     print ('Plugin successfully created!')
 
     print('Removing temporary \'kindleunpack\' directory ...')
