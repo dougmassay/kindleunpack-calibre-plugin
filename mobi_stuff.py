@@ -11,7 +11,7 @@ import re
 
 import calibre_plugins.kindleunpack_plugin.config as cfg
 import calibre_plugins.kindleunpack_plugin.kindleunpack.kindleunpack as _mu
-from calibre_plugins.kindleunpack_plugin.kindleunpack.compatibility_utils import PY2, bstr, utf8_str
+from calibre_plugins.kindleunpack_plugin.kindleunpack.compatibility_utils import PY2, bstr, unicode_str
 from calibre_plugins.kindleunpack_plugin.kindleunpack.mobi_split import mobi_split
 
 
@@ -132,7 +132,7 @@ class mobiProcessor:
         return epub
 
     def writeSplitCombo(self, outdir):
-        mobi_to_split = mobi_split(utf8_str(self.infile))
+        mobi_to_split = mobi_split(unicode_str(self.infile))
         outMobi = makeFileNames('MOBI-', self.infile, outdir)
         outKF8 = makeFileNames('KF8-', self.infile, outdir, True)
         file(outMobi, 'wb').write(mobi_to_split.getResult7())
