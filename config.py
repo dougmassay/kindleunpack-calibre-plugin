@@ -14,6 +14,7 @@ except ImportError:
                             QGroupBox, QVBoxLayout, QComboBox)
 
 from calibre.utils.config import JSONConfig
+from calibre.utils.filenames import expanduser
 from calibre.gui2 import choose_dir, error_dialog
 
 from calibre_plugins.kindleunpack_plugin.__init__ import PLUGIN_NAME, PLUGIN_VERSION
@@ -24,7 +25,7 @@ PLUGIN_ICONS = ['images/explode3.png', 'images/acrobat.png']
 plugin_prefs = JSONConfig('plugins/KindleUnpack_prefs')
 
 # Set default preferences
-plugin_prefs.defaults['Unpack_Folder'] = os.path.expanduser('~')
+plugin_prefs.defaults['Unpack_Folder'] = expanduser('~')
 plugin_prefs.defaults['Always_Use_Unpack_Folder'] = False
 plugin_prefs.defaults['Use_HD_Images'] = False
 plugin_prefs.defaults['Epub_Version'] = '2'
