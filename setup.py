@@ -10,7 +10,6 @@ import sys
 import re
 import codecs
 import glob
-import shutil
 import inspect
 import zipfile
 from subprocess import Popen, PIPE, STDOUT
