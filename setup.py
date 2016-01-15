@@ -12,7 +12,6 @@ import codecs
 import glob
 import shutil
 import inspect
-# import pythonpatch
 import zipfile
 from subprocess import Popen, PIPE, STDOUT
 
@@ -25,8 +24,6 @@ except LookupError:
 
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-KU_DIR = os.path.join(SCRIPT_DIR, 'kindleunpack')
-CORE_LIB_DIR = os.path.join(SCRIPT_DIR, 'core_subtree', 'lib')
 
 PLUGIN_DIRS = ['images', 'kindleunpackcore']
 
@@ -87,19 +84,12 @@ def zipUpDir(myzip, tdir, localname):
         elif os.path.isdir(realfilePath):
             zipUpDir(myzip, tdir, localfilePath)
 
-def removePreviousKU(rmzip=False):
-    '''
-    # Remove kindleunpack folder an contents if it exists
-    if os.path.exists(KU_DIR) and os.path.isdir(KU_DIR):
-        shutil.rmtree(KU_DIR)
-    '''
-
-    if rmzip:
-        print ('Removing any leftover zip files ...')
-        for each in glob.glob('kindle_unpack_v*_plugin.zip'):
-            path = os.path.join(SCRIPT_DIR, each)
-            if os.path.exists(path):
-                os.remove(path)
+def removePreviousZip():
+    print ('Removing any leftover zip files ...')
+    for each in glob.glob('kindle_unpack_v*_plugin.zip'):
+        path = os.path.join(SCRIPT_DIR, each)
+        if os.path.exists(path):
+            os.remove(path)
 
 
 if __name__ == "__main__":
@@ -110,29 +100,7 @@ if __name__ == "__main__":
     (options, args) = opt.parse_args()
 
     print('Removing any previous build leftovers ...')
-    removePreviousKU(rmzip=True)
-
-    ''''
-    # Copy lib directory from KindleUnpack repo as 'kindleunpack' (temporarily)
-    print ('Copying upstream \'lib\' directory to temporary \'kindleunpack\' ...')
-    try:
-        shutil.copytree(CORE_LIB_DIR, KU_DIR)
-    except:
-        sys.exit('Couldn\'t copy necessary core_subtree/lib directory!')
-
-    # Patch kindleunpack.py
-    print ('Attempting to patch upstream file(s) ...')
-    patchfiles = glob.glob('*.patch')
-    for patch in patchfiles:
-        parsedPatchSet = pythonpatch.fromfile(patch)
-        if parsedPatchSet is not False:
-            if parsedPatchSet.apply():
-                print(parsedPatchSet.diffstat())
-            else:
-                sys.exit('Cannot patch upstream file(s)!')
-        else:
-            sys.exit('Cannot patch upstream file(s)!')
-    '''''
+    removePreviousZip()
 
     print ('Creating {} ...'.format(os.path.basename(PLUGIN_NAME)))
     files = os.listdir(SCRIPT_DIR)
@@ -146,11 +114,6 @@ if __name__ == "__main__":
     outzip.close()
 
     print ('Plugin successfully created!')
-
-    '''
-    print('Removing temporary \'kindleunpack\' directory ...')
-    removePreviousKU()
-    '''
 
     if options.debugmode:
         print('\nAttempting to install plugin and launch calibre ...')
