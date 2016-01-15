@@ -40,7 +40,7 @@ target/
 
 # Temporary build directories
 kindleunpack/
-kindleunpack/core
+kindleunpackcore/
 
 # Zip files (plugin releases)
 *.zip
