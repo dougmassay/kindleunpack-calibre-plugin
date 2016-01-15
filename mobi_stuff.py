@@ -10,9 +10,9 @@ import struct
 import re
 
 import calibre_plugins.kindleunpack_plugin.config as cfg
-import calibre_plugins.kindleunpack_plugin.kindleunpack.kindleunpack as _mu
-from calibre_plugins.kindleunpack_plugin.kindleunpack.compatibility_utils import PY2, bstr, unicode_str
-from calibre_plugins.kindleunpack_plugin.kindleunpack.mobi_split import mobi_split
+import calibre_plugins.kindleunpack_plugin.kindleunpackcore.kindleunpack as _mu
+from calibre_plugins.kindleunpack_plugin.kindleunpackcore.compatibility_utils import PY2, bstr, unicode_str
+from calibre_plugins.kindleunpack_plugin.kindleunpackcore.mobi_split import mobi_split
 
 
 if PY2:

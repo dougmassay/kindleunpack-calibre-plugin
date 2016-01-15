@@ -1,15 +1,15 @@
 --- ./kindleunpack.py
-+++ ./kindleunpack/kindleunpack.py
++++ ../kindleunpackcore/kindleunpack.py
 @@ -4,10 +4,10 @@
  
  from __future__ import unicode_literals, division, absolute_import, print_function
  
 -__path__ = ["lib", ".", "kindleunpack"]
-+#__path__ = ["lib", ".", "kindleunpack"]
++# __path__ = ["lib", ".", "kindleunpack"]
  
  import sys
 -import codecs
-+#import codecs
++# import codecs
  import traceback
  
  from .compatibility_utils import PY2, binary_type, utf8_str, unicode_str

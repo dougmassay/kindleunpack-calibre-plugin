@@ -12,7 +12,7 @@ import codecs
 import glob
 import shutil
 import inspect
-import pythonpatch
+# import pythonpatch
 import zipfile
 from subprocess import Popen, PIPE, STDOUT
 
@@ -28,7 +28,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 KU_DIR = os.path.join(SCRIPT_DIR, 'kindleunpack')
 CORE_LIB_DIR = os.path.join(SCRIPT_DIR, 'core_subtree', 'lib')
 
-PLUGIN_DIRS = ['images', 'kindleunpack']
+PLUGIN_DIRS = ['images', 'kindleunpackcore']
 
 PLUGIN_FILES = ['__init__.py',
             'action.py',
@@ -88,9 +88,11 @@ def zipUpDir(myzip, tdir, localname):
             zipUpDir(myzip, tdir, localfilePath)
 
 def removePreviousKU(rmzip=False):
+    '''
     # Remove kindleunpack folder an contents if it exists
     if os.path.exists(KU_DIR) and os.path.isdir(KU_DIR):
         shutil.rmtree(KU_DIR)
+    '''
 
     if rmzip:
         print ('Removing any leftover zip files ...')
@@ -110,6 +112,7 @@ if __name__ == "__main__":
     print('Removing any previous build leftovers ...')
     removePreviousKU(rmzip=True)
 
+    ''''
     # Copy lib directory from KindleUnpack repo as 'kindleunpack' (temporarily)
     print ('Copying upstream \'lib\' directory to temporary \'kindleunpack\' ...')
     try:
@@ -129,6 +132,7 @@ if __name__ == "__main__":
                 sys.exit('Cannot patch upstream file(s)!')
         else:
             sys.exit('Cannot patch upstream file(s)!')
+    '''''
 
     print ('Creating {} ...'.format(os.path.basename(PLUGIN_NAME)))
     files = os.listdir(SCRIPT_DIR)
@@ -143,8 +147,10 @@ if __name__ == "__main__":
 
     print ('Plugin successfully created!')
 
+    '''
     print('Removing temporary \'kindleunpack\' directory ...')
     removePreviousKU()
+    '''
 
     if options.debugmode:
         print('\nAttempting to install plugin and launch calibre ...')
