@@ -127,7 +127,7 @@ class InterfacePlugin(InterfaceAction):
             mnu_img = 'drm-unlocked.png'
             mnu_tip = 'This {0} file is DRM-Free.'.format(format)
             if kindle_obj.isEncrypted:
-                print ('isEncrypted = {0}'.format(kindle_obj.isEncrypted))
+                print('isEncrypted = {0}'.format(kindle_obj.isEncrypted))
                 mnu_tip = 'This {0} file has DRM... can\'t unpack.'.format(format)
                 mnu_img = 'drm-locked.png'
             ac = create_menu_item(self, m, _(format), mnu_img, _(mnu_tip), None)

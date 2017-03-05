@@ -58,6 +58,7 @@ def retrieveKindleUnpack():
                 status = status + chr(8)*(len(status)+1)
                 print(status),
 
+
 retrieveKindleUnpack()
 
 if os.path.exists(TARGET_DIR) and os.path.isdir(TARGET_DIR):
@@ -76,7 +77,7 @@ with zipfile.ZipFile(FILE_NAME) as zip_file:
                 shutil.copyfileobj(source, target)
 
 # Patch kindleunpack.py, mobi_nav.py
-print ('Attempting to patch KindleUnpack file(s) ...')
+print('Attempting to patch KindleUnpack file(s) ...')
 patchfiles = glob.glob('*.patch')
 for patch in patchfiles:
     parsedPatchSet = pythonpatch.fromfile(patch)
