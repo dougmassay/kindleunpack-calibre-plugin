@@ -69,7 +69,7 @@ class MobiHeaderLight:
             before, after = self.sect.sectionoffsets[i:i+2]
             if (after - before) == 8:
                 data = self.sect.loadSection(i)
-                if data == b'BOUNDARY':
+                if data == b'BOUNDARY' and self.version != 8:
                     return True
                     break
         return False
