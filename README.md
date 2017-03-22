@@ -25,7 +25,7 @@ Then you need to prepare the source by downloading some core files from the Kind
     $ cd ./kindleunpack-calibre-plugin/setup_tools
     $ python getkucore.py
     $ cd ..
-    
+
 This will create a kindleunpackcore folder. You only need to prepare this folder once -- unless KindleUnpack is updated and you want to use the latest. In that case, just repeat those last 3 steps whenever you want to update the kindleunpackcore files. It will delete the folder and recreate it as necessary.
 
 To create the plugin zip file, run the setup.py script (root of the repository tree) with Python
@@ -38,7 +38,7 @@ path and you add the '-d' option, setup.py will attempt to:
     1) close calibre if it's open
     2) install the plugin using calibre-customize
     3) relaunch calibre in debug-mode
-    
+
 If all goes well, the plugin can now be run and any debug print statements/errors should print
 to the terminal. If you have a complex calibre setup (or it's not on you path), you may need to
 install the plugin manually to debug.
@@ -61,14 +61,14 @@ The core plugin files (this is where most contributors will spend their time) ar
     > images/explode3.png
     > __init__.py
     > action.py
-    > plugin-import-name-kindleunpack_plugin.txt 
-    > config.py                                 
+    > plugin-import-name-kindleunpack_plugin.txt
+    > config.py
     > dialogs.py
     > mobi_stuff.py
     > utilities.py
 
 It's important to note that any import statements in the above files that look like:
-   
+
     from calibre_plugins.kindleunpack_plugin.kindleunpackcore.blah import blah
 
 are actually referring to a 'blah' module / script in the kindleunpackcore directory.
@@ -92,7 +92,7 @@ Files used for building/maintaining the plugin:
     > setup.py  -- this is used to build the plugin.
     > setup.cfg -- used for flake8 style checking. Use it to see if your code complies.
     > setup_tools/getkucore.py  -- used to retrieve/prepare upstream KindleUnpack files.
-    > setup_tools/pythonpatch.py  -- used by setup.py to apply patches to upstream files if necessary. 
+    > setup_tools/pythonpatch.py  -- used by setup.py to apply patches to upstream files if necessary.
     > setup_tools/kindleunpack.patch  -- patch that will be applied to kindleunpackcore/kindleunpack.py
     > setup_tools/mobi_nav.patch  -- patch that will be applied to kindleunpackcore/mobi_nav.py
 
@@ -100,11 +100,11 @@ Files used for building/maintaining the plugin:
 License Information
 =======
 
-###KindleUnpack the Calibre Plugin
+### KindleUnpack the Calibre Plugin
 
     Licensed under the GPLv3.
 
-###KindleUnpack (https://github.com/kevinhendricks/KindleUnpack)
+### KindleUnpack (https://github.com/kevinhendricks/KindleUnpack)
 
     Based on initial mobipocket version Copyright © 2009 Charles M. Hannum <root@ihack.net>
     Extensive Extensions and Improvements Copyright © 2009-2014 
@@ -113,7 +113,7 @@ License Information
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, version 3.
 
-###python-patch (https://github.com/techtonik/python-patch)
+### python-patch (https://github.com/techtonik/python-patch)
 
     Copyright © 2008-2015 anatoly techtonik
     Available under the terms of the MIT license (http://opensource.org/licenses/mit-license.php)
