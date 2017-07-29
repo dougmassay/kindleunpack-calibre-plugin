@@ -19,9 +19,14 @@ else:
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 SOURCE_DIR = os.path.dirname(SCRIPT_DIR)
-REMOTE_URL = 'https://github.com/kevinhendricks/KindleUnpack/archive/master.zip'
-FILE_NAME = os.path.join(SCRIPT_DIR, REMOTE_URL.split('/')[-1])
-CORE_DIR = 'KindleUnpack-master/lib/'
+COMMIT_SHA = 'a92c31c1936bfa876c5b02c785f6bdbf29157b61'
+# REMOTE_URL = 'https://github.com/kevinhendricks/KindleUnpack/archive/master.zip'
+REMOTE_URL = 'https://github.com/kevinhendricks/KindleUnpack/archive/{}.zip'.format(COMMIT_SHA)
+# FILE_NAME = os.path.join(SCRIPT_DIR, REMOTE_URL.split('/')[-1])
+FILE_NAME = os.path.join(SCRIPT_DIR, 'KindleUnpack-{}'.format(REMOTE_URL.split('/')[-1]))
+# CORE_DIR = 'KindleUnpack-master/lib/'
+CORE_DIR = 'KindleUnpack-{}/lib'.format(COMMIT_SHA)
+CORE_EXCLUDES = ['askfolder_ed.py', 'mobiml2xhtml.py', 'prefs.py', 'scrolltextwidget.py']
 TARGET_DIR = os.path.join(SOURCE_DIR, 'kindleunpackcore')
 
 def retrieveKindleUnpack():
@@ -69,7 +74,7 @@ with zipfile.ZipFile(FILE_NAME) as zip_file:
     for member in zip_file.namelist():
         if member.startswith(CORE_DIR):
             name = os.path.basename(member)
-            if not name or name == 'mobiml2xhtml.py':
+            if not name or name in CORE_EXCLUDES:
                 continue
             source = zip_file.open(member)
             target = open(os.path.join(TARGET_DIR, name), "wb")
