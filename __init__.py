@@ -13,7 +13,7 @@ from calibre.customize import InterfaceActionBase
 
 PLUGIN_NAME = 'KindleUnpack - The Plugin'
 PLUGIN_DESCRIPTION = '\nUnpacks a Kindle Book/MOBI into its source components.'
-PLUGIN_VERSION_TUPLE = (0, 81, 5)
+PLUGIN_VERSION_TUPLE = (0, 82, 1)
 PLUGIN_VERSION = '.'.join([str(x) for x in PLUGIN_VERSION_TUPLE])
 PLUGIN_AUTHORS = \
 """DiapDealer.
@@ -29,7 +29,7 @@ class ExtractMobiAction(InterfaceActionBase):
     supported_platforms     = ['windows', 'osx', 'linux']
     author                  = PLUGIN_AUTHORS
     version                 = PLUGIN_VERSION_TUPLE
-    minimum_calibre_version = (0, 8, 18)
+    minimum_calibre_version = (0, 8, 60)
 
     #: This field defines the GUI plugin class that contains all the code
     #: that actually does something. Its format is module_path:class_name
