@@ -5,7 +5,18 @@ from __future__ import (unicode_literals, division, absolute_import,
 __license__   = 'GPL v3'
 __docformat__ = 'restructuredtext en'
 
-import os
+import os, sys
+
+PY2 = sys.version_info[0] == 2
+PY3 = sys.version_info[0] == 3
+if PY3:
+    text_type = str
+    binary_type = bytes
+else:
+    range = xrange
+    text_type = unicode
+    binary_type = str
+
 try:
     from PyQt5.Qt import (QWidget, QLabel, QLineEdit, QPushButton, QCheckBox,
                             QGroupBox, QVBoxLayout, QComboBox)
@@ -89,13 +100,13 @@ class ConfigWidget(QWidget):
 
     def save_settings(self):
         # Save current dialog sttings back to JSON config file
-            plugin_prefs['Unpack_Folder'] = unicode(self.directory_txtBox.displayText())
+            plugin_prefs['Unpack_Folder'] = text_type(self.directory_txtBox.displayText())
             plugin_prefs['Always_Use_Unpack_Folder'] = self.default_folder_check.isChecked()
             plugin_prefs['Use_HD_Images'] = self.use_hd_images.isChecked()
-            if unicode(self.epub_version_combobox.currentText()) == 'Auto-detect':
+            if text_type(self.epub_version_combobox.currentText()) == 'Auto-detect':
                 plugin_prefs['Epub_Version'] = 'A'
             else:
-                plugin_prefs['Epub_Version'] = unicode(self.epub_version_combobox.currentText())[4:]
+                plugin_prefs['Epub_Version'] = text_type(self.epub_version_combobox.currentText())[4:]
 
     def getDirectory(self):
         c = choose_dir(self, _(PLUGIN_NAME + 'dir_chooser'),

@@ -265,7 +265,7 @@ class InterfacePlugin(InterfaceAction):
         if outdir:
             try:
                 kindle_obj.unpackMOBI(outdir)
-            except Exception, e:
+            except Exception as e:
                 return showErrorDlg(str(e), self.gui, True)
             open_local_file(outdir)
 
@@ -280,7 +280,7 @@ class InterfacePlugin(InterfaceAction):
             format = 'EPUB'
             try:
                 bookfile = kindle_obj.unpackEPUB(outdir)
-            except Exception, e:
+            except Exception as e:
                 if quiet:
                     return False, str(e)
                 return showErrorDlg(str(e), self.gui, True)
@@ -289,7 +289,7 @@ class InterfacePlugin(InterfaceAction):
             format = 'PDF'
             try:
                 bookfile = kindle_obj.getPDFFile(outdir)
-            except Exception, e:
+            except Exception as e:
                 if quiet:
                     return False, str(e)
                 return showErrorDlg(str(e), self.gui, True)
@@ -321,6 +321,6 @@ class InterfacePlugin(InterfaceAction):
         if outdir:
             try:
                 kindle_obj.writeSplitCombo(outdir)
-            except Exception, e:
+            except Exception as e:
                 return showErrorDlg(str(e), self.gui, True)
             open_local_file(outdir)

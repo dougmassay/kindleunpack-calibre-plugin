@@ -7,7 +7,7 @@ __docformat__ = 'restructuredtext en'
 
 
 import os
-from StringIO import StringIO
+from io import StringIO
 from traceback import print_exc
 
 try:
@@ -220,7 +220,7 @@ class KindleFormatDetails:
             return self.__details
         try:
             mobi = mobiProcessor(path)
-        except Exception, e:
+        except Exception as e:
             self.__details['errors'] = str(e)
             return self.__details
         self.__details['kindle_obj'] = mobi
