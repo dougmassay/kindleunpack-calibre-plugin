@@ -32,7 +32,8 @@ class InterfacePlugin(InterfaceAction):
     action_spec = ('KindleUnpack', None,
             _(PLUGIN_DESCRIPTION), None)
     popup_type = QToolButton.InstantPopup
-    dont_add_to = frozenset(['menubar-device', 'toolbar-device', 'context-menu-device'])
+    # dont_add_to = frozenset(['menubar-device', 'toolbar-device', 'context-menu-device'])
+    dont_add_to = frozenset(['context-menu-device'])
     action_type = 'current'
 
     def genesis(self):
