@@ -8,6 +8,7 @@ __docformat__ = 'restructuredtext en'
 import os
 import struct
 import re
+from io import open
 
 import calibre_plugins.kindleunpack_plugin.config as cfg
 import calibre_plugins.kindleunpack_plugin.kindleunpackcore.kindleunpack as _mu
@@ -135,5 +136,5 @@ class mobiProcessor:
         mobi_to_split = mobi_split(unicode_str(self.infile))
         outMobi = makeFileNames('MOBI-', self.infile, outdir)
         outKF8 = makeFileNames('KF8-', self.infile, outdir, True)
-        file(outMobi, 'wb').write(mobi_to_split.getResult7())
-        file(outKF8, 'wb').write(mobi_to_split.getResult8())
+        open(outMobi, 'wb').write(mobi_to_split.getResult7())
+        open(outKF8, 'wb').write(mobi_to_split.getResult8())
