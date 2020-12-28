@@ -19,7 +19,7 @@ else:
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 SOURCE_DIR = os.path.dirname(SCRIPT_DIR)
-COMMIT_SHA = '743728e541d5bf2dbc8127f4334dc1530eca0a30'
+COMMIT_SHA = 'c8be31a196fd92803f78ad34a3f18d40319bbac5'
 # REMOTE_URL = 'https://github.com/kevinhendricks/KindleUnpack/archive/master.zip'
 REMOTE_URL = 'https://github.com/kevinhendricks/KindleUnpack/archive/{}.zip'.format(COMMIT_SHA)
 # FILE_NAME = os.path.join(SCRIPT_DIR, REMOTE_URL.split('/')[-1])
