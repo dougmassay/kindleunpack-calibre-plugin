@@ -6,11 +6,15 @@ __license__   = 'GPL v3'
 __docformat__ = 'restructuredtext en'
 
 try:
-    from PyQt5.Qt import (Qt, QProgressDialog, QTimer, QSize, QDialog, QIcon,
-                      QDialogButtonBox, QApplication, QTextBrowser, QVBoxLayout)
+    from qt.core import (Qt, QProgressDialog, QTimer, QSize, QDialog, QIcon,
+                    QDialogButtonBox, QApplication, QTextBrowser, QVBoxLayout)
 except ImportError:
-    from PyQt4.Qt import (Qt, QProgressDialog, QTimer, QSize, QDialog, QIcon,
-                      QDialogButtonBox, QApplication, QTextBrowser, QVBoxLayout)
+    try:
+        from PyQt5.Qt import (Qt, QProgressDialog, QTimer, QSize, QDialog, QIcon,
+                        QDialogButtonBox, QApplication, QTextBrowser, QVBoxLayout)
+    except ImportError:
+        from PyQt4.Qt import (Qt, QProgressDialog, QTimer, QSize, QDialog, QIcon,
+                        QDialogButtonBox, QApplication, QTextBrowser, QVBoxLayout)
 
 from calibre.gui2.dialogs.message_box import MessageBox
 from calibre_plugins.kindleunpack_plugin.__init__ import (PLUGIN_NAME, PLUGIN_VERSION)

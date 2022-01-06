@@ -18,11 +18,15 @@ else:
     binary_type = str
 
 try:
-    from PyQt5.Qt import (QWidget, QLabel, QLineEdit, QPushButton, QCheckBox,
-                            QGroupBox, QVBoxLayout, QComboBox)
+    from qt.core import (QWidget, QLabel, QLineEdit, QPushButton, QCheckBox,
+                        QGroupBox, QVBoxLayout, QComboBox)
 except ImportError:
-    from PyQt4.Qt import (QWidget, QLabel, QLineEdit, QPushButton, QCheckBox,
-                            QGroupBox, QVBoxLayout, QComboBox)
+    try:
+        from PyQt5.Qt import (QWidget, QLabel, QLineEdit, QPushButton, QCheckBox,
+                                QGroupBox, QVBoxLayout, QComboBox)
+    except ImportError:
+        from PyQt4.Qt import (QWidget, QLabel, QLineEdit, QPushButton, QCheckBox,
+                                QGroupBox, QVBoxLayout, QComboBox)
 
 from calibre.utils.config import JSONConfig
 try:

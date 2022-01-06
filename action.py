@@ -10,9 +10,12 @@ import os
 from functools import partial
 
 try:
-    from PyQt5.Qt import QMenu, QToolButton
+    from qt.core import QMenu, QToolButton
 except ImportError:
-    from PyQt4.Qt import QMenu, QToolButton
+    try:
+        from PyQt5.Qt import QMenu, QToolButton
+    except ImportError:
+        from PyQt4.Qt import QMenu, QToolButton
 
 from calibre.gui2 import choose_dir, info_dialog, open_local_file
 from calibre.gui2.actions import InterfaceAction

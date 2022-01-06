@@ -11,9 +11,12 @@ from io import BytesIO as StringIO
 from traceback import print_exc
 
 try:
-    from PyQt5.Qt import QPixmap, QIcon
+    from qt.core import QPixmap, QIcon
 except ImportError:
-    from PyQt4.Qt import QPixmap, QIcon
+    try:
+        from PyQt5.Qt import QPixmap, QIcon
+    except ImportError:
+        from PyQt4.Qt import QPixmap, QIcon
 
 from calibre.utils.config import config_dir
 from calibre.constants import iswindows
