@@ -64,24 +64,28 @@ class ProgressDialog(QProgressDialog):
 
         if self.target_format in format_dict.keys():
             format = format_dict[self.target_format].get_format_details()
-            kindle_obj = format['kindle_obj']
 
-            if not kindle_obj.isEncrypted:
-                if getattr(kindle_obj, self.attr):
-                    if format['goal_format'] not in all_formats:
-                        success, error = self.callback_fn(kindle_obj, book_id, self.target_format, True)
-                        if success:
-                            self.successes.append((book_id, dtitle))
-                        elif error is None:
-                            self.failures.append((5, dtitle, '{0} already has a {1} format. Won\'t overwrite.'.format(dtitle, format['goal_format'])))
-                        else:
-                            self.failures.append((4, dtitle, 'Unknown error processing {0}\'s {1} format'.format(dtitle, self.target_format)))
-                    else:
-                        self.failures.append((5, dtitle, '{0} already has a {1} format. Won\'t overwrite.'.format(dtitle, format['goal_format'])))
-                else:
-                    self.failures.append((3, dtitle, '{0}\'s {1} format is not a {2} book.'.format(dtitle, self.target_format, self.kindle_type)))
+            if format['errors'] is not None:
+                self.failures.append((2, dtitle, '{0}\'s {1} format might not be a valid mobi/kindlebook.'.format(dtitle, format)))
             else:
-                self.failures.append((2, dtitle, '{0} is encrypted.'.format(dtitle)))
+                kindle_obj = format['kindle_obj']
+
+                if not kindle_obj.isEncrypted:
+                    if getattr(kindle_obj, self.attr):
+                        if format['goal_format'] not in all_formats:
+                            success, error = self.callback_fn(kindle_obj, book_id, self.target_format, True)
+                            if success:
+                                self.successes.append((book_id, dtitle))
+                            elif error is None:
+                                self.failures.append((5, dtitle, '{0} already has a {1} format. Won\'t overwrite.'.format(dtitle, format['goal_format'])))
+                            else:
+                                self.failures.append((4, dtitle, 'Unknown error processing {0}\'s {1} format'.format(dtitle, self.target_format)))
+                        else:
+                            self.failures.append((5, dtitle, '{0} already has a {1} format. Won\'t overwrite.'.format(dtitle, format['goal_format'])))
+                    else:
+                        self.failures.append((3, dtitle, '{0}\'s {1} format is not a {2} book.'.format(dtitle, self.target_format, self.kindle_type)))
+                else:
+                    self.failures.append((2, dtitle, '{0} is encrypted.'.format(dtitle)))
         else:
             self.failures.append((1, dtitle, '{0} has no {1} format to work with.'.format(dtitle, self.target_format)))
 
