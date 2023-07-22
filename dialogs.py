@@ -18,16 +18,17 @@ except ImportError:
 
 from calibre.gui2.dialogs.message_box import MessageBox
 from calibre_plugins.kindleunpack_plugin.__init__ import (PLUGIN_NAME, PLUGIN_VERSION)
+from calibre_plugins.kindleunpack_plugin.utilities import KindleFormats
 
 class ProgressDialog(QProgressDialog):
     '''
     Used to process Multiple selections of AZW3/AZW4 into EPUBs/PDFs.
     '''
-    def __init__(self, gui, books, callback_fn, db, target_format, attr, status_msg_type='books', action_type='Checking'):
-        self.total_count = len(books)
+    def __init__(self, gui, book_ids, callback_fn, db, target_format, attr, status_msg_type='books', action_type='Checking'):
+        self.total_count = len(book_ids)
         QProgressDialog.__init__(self, '', 'Cancel', 0, self.total_count, gui)
         self.setMinimumWidth(500)
-        self.books, self.callback_fn, self.db, self.target_format, self.attr = books, callback_fn, db, target_format, attr
+        self.book_ids, self.callback_fn, self.db, self.target_format, self.attr = book_ids, callback_fn, db, target_format, attr
         self.action_type, self.status_msg_type = action_type, status_msg_type
         if attr == 'isKF8':
             self.kindle_type = 'KF8'
@@ -47,10 +48,11 @@ class ProgressDialog(QProgressDialog):
             return self.do_close()
         if self.i >= self.total_count:
             return self.do_close()
-        book_info = self.books[self.i]
+
+        book_id = self.book_ids[self.i]
         self.i += 1
 
-        book_id, dtitle, format_dict = book_info[0], book_info[1], book_info[2]
+        dtitle, format_dict = self.gather_kindle_formats(book_id, self.target_format, self.goal)
 
         all_formats = self.db.formats(book_id, index_is_id=True, verify_formats=True)
         if all_formats is not None:
@@ -92,6 +94,20 @@ class ProgressDialog(QProgressDialog):
         self.setValue(self.i)
 
         QTimer.singleShot(0, self.do_multiple_book_action)
+
+
+    def gather_kindle_formats(self, book_id, target_format, goal_format=None):
+        '''
+        Gathers all the kindle formats for the book and uses the KindleFormats class
+        in utlities.py to collect details. Including an initialized mobiProcessor object.
+        '''
+        title = self.db.get_metadata(book_id, index_is_id=True, get_user_categories=False).title
+        book = KindleFormats(book_id, self.db, [target_format], goal_format)
+        details = book.get_formats()
+        if details:
+            return (title, details)
+
+        return None
 
     def do_close(self):
         self.hide()

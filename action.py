@@ -229,10 +229,10 @@ class InterfacePlugin(InterfaceAction):
             goal_format = 'PDF'
             status_msg_type='Print Replica books'
             action_type='Extracting PDFs from'
-        books_info = self.gatherKindleFormats(book_ids, [target_format], goal_format)
+
         # If we have stuff ... send it on its way to the pretty ProgressDialog.
-        if books_info:
-            d = ProgressDialog(self.gui, books_info, self.extract_element, db, target_format, attr,
+        if goal_format:
+            d = ProgressDialog(self.gui, book_ids, self.extract_element, db, target_format, attr,
                                    status_msg_type=status_msg_type, action_type=action_type)
             if d.wasCanceled():
                 return
