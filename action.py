@@ -26,8 +26,8 @@ from calibre_plugins.kindleunpack_plugin.__init__ import (PLUGIN_NAME,
 import calibre_plugins.kindleunpack_plugin.config as cfg
 from calibre_plugins.kindleunpack_plugin.dialogs import ProgressDialog, ResultsSummaryDialog
 # from calibre_plugins.kindleunpack_plugin.mobi_stuff import mobiProcessor
-from calibre_plugins.kindleunpack_plugin.utilities import (get_icon, KindleFormats, set_plugin_icon_resources,
-                                showErrorDlg, create_menu_item, create_menu_action_unique, build_log)
+from calibre_plugins.kindleunpack_plugin.utilities import (get_icon, set_plugin_icon_resources,
+                                showErrorDlg, create_menu_item, create_menu_action_unique, build_log, gather_kindle_formats)
 
 
 class InterfacePlugin(InterfaceAction):
@@ -38,9 +38,10 @@ class InterfacePlugin(InterfaceAction):
     # dont_add_to = frozenset(['menubar-device', 'toolbar-device', 'context-menu-device'])
     dont_add_to = frozenset(['context-menu-device'])
     action_type = 'current'
+    action_add_menu = True
 
     def genesis(self):
-        self.menu = QMenu(self.gui)
+        self.menu = self.qaction.menu()
         icon_resources = self.load_resources(cfg.PLUGIN_ICONS)
         set_plugin_icon_resources(cfg.PLUGIN_NAME, icon_resources)
 
@@ -101,7 +102,8 @@ class InterfacePlugin(InterfaceAction):
 
         format_dict = book_list[1]
         for format in format_dict.keys():
-            format_details = format_dict[format].get_format_details()
+            kindle_format_obj = format_dict[format]
+            format_details = kindle_format_obj.get_format_details()
             # Weird and unlikely possiblity that there is no file on disk for this format at this point.
             if format_details['errors'] is not None and format_details['errors'] == 'path':
                 tool_tip = 'No file on disk. Can\'t unpack.'
@@ -141,7 +143,7 @@ class InterfacePlugin(InterfaceAction):
             # Standard unpack to external folder ... disable menu if kindlebook encrypted.
             tool_tip = 'Unpack the {0}\'s source components'.format(format)
             unpack_menu = create_menu_action_unique(self, sm, _('Unpack')+' {0}'.format(format), 'images/explode3.png',
-                                                _(tool_tip), False, triggered=partial(self.unpack_ebook, kindle_obj))
+                                                _(tool_tip), False, triggered=partial(self.unpack_ebook, book_id, kindle_format_obj.format))
             if kindle_obj.isEncrypted:
                 unpack_menu.setEnabled(False)
 
@@ -149,20 +151,20 @@ class InterfacePlugin(InterfaceAction):
             if kindle_obj.isPrintReplica:
                 tool_tip = 'Extract the PDF from the Print Replica format and add it to the library.'
                 create_menu_action_unique(self, sm, _('Extract PDF')+'...', 'mimetypes/pdf.png', _(tool_tip), False,
-                                            triggered=partial(self.extract_element, kindle_obj, book_id, u'AZW4', False))
+                                            triggered=partial(self.extract_element, None, book_id, u'AZW4', False))
 
             # Offer to split kindlegen dual format output.
             if kindle_obj.isComboFile:
                 tool_tip = 'Split the combo KF8/MOBI file into its two components.'
                 create_menu_action_unique(self, sm, _('Split KF8/MOBI')+'...', 'edit-cut.png', _(tool_tip),
-                                            False, triggered=partial(self.combo_split, kindle_obj))
+                                            False, triggered=partial(self.combo_split, book_id, kindle_format_obj.format))
 
             # Extract ePub from the unpacked contents and add to current book's formats.
             convert_menu = None
             if kindle_obj.isKF8 or kindle_obj.isComboFile:
                 tool_tip = 'Convert standalone KF8 file to its original ePub.'
                 convert_menu = create_menu_action_unique(self, sm, _('KF8 to ePub')+'...', 'mimetypes/epub.png', _(tool_tip),
-                                            False, triggered=partial(self.extract_element, kindle_obj, book_id, u'AZW3', False))
+                                            False, triggered=partial(self.extract_element, None, book_id, u'AZW3', False))
             if kindle_obj.isEncrypted and convert_menu is not None:
                 convert_menu.setEnabled(False)
 
@@ -246,11 +248,15 @@ class InterfacePlugin(InterfaceAction):
         self.gui.library_view.select_rows(ids_to_highlight)
         return
 
-    def unpack_ebook(self, kindle_obj):
+    def unpack_ebook(self, book_id, target_format):
         '''
         Unpack kindlebook to external folder.
         '''
         outdir = self.directoryChooser()
+        db = self.gui.library_view.model().db
+        ignore, details = gather_kindle_formats(db, book_id, target_format)
+        kindle_obj = details[target_format].get_format_details()['kindle_obj']
+
         if outdir:
             try:
                 kindle_obj.unpackMOBI(outdir)
@@ -264,6 +270,12 @@ class InterfacePlugin(InterfaceAction):
         '''
         outdir = PersistentTemporaryDirectory()
         errmsg = ''
+
+        if kindle_obj is None:
+            db = self.gui.library_view.model().db
+            ignore, details = gather_kindle_formats(db, book_id, target)
+            kindle_obj = details[target].get_format_details()['kindle_obj']
+
         if target == 'AZW3':
             errmsg = 'An'
             format = 'EPUB'
@@ -302,11 +314,15 @@ class InterfacePlugin(InterfaceAction):
             return False, errmsg
         return showErrorDlg(errmsg, self.gui)
 
-    def combo_split(self, kindle_obj):
+    def combo_split(self, book_id, target_format):
         '''
         Split kindlegen output into its AZW3/MOBI pieces.
         '''
         outdir = self.directoryChooser()
+        db = self.gui.library_view.model().db
+        ignore, details = gather_kindle_formats(db, book_id, target_format)
+        kindle_obj = details[target_format].get_format_details()['kindle_obj']
+
         if outdir:
             try:
                 kindle_obj.writeSplitCombo(outdir)
