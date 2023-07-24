@@ -86,7 +86,8 @@ class InterfacePlugin(InterfaceAction):
         m = self.menu
         m.clear()
         kindle_formats = ['MOBI', 'AZW', 'AZW3', 'AZW4', 'PRC']
-        book_list = self.gatherKindleFormats([book_id], kindle_formats)
+        db = self.gui.library_view.model().db
+        book_list = gather_kindle_formats(db, book_id, kindle_formats)
         if not book_list:
             tool_tip = 'No suitable format to unpack.'
             error_menu = create_menu_item(self, m, _(tool_tip)+'...', None, _(tool_tip), None, None)
@@ -98,7 +99,7 @@ class InterfacePlugin(InterfaceAction):
             self.gui.keyboard.finalize()
             return
 
-        format_dict = book_list[0][2]
+        format_dict = book_list[1]
         for format in format_dict.keys():
             format_details = format_dict[format].get_format_details()
             # Weird and unlikely possiblity that there is no file on disk for this format at this point.
@@ -197,22 +198,6 @@ class InterfacePlugin(InterfaceAction):
         else:
             return choose_dir(self.gui, _(PLUGIN_NAME + 'dir_chooser'),
                 _('Select Directory To Unpack Kindle/Mobi Book To'))
-
-    def gatherKindleFormats(self, book_ids, target_formats, goal_format=None):
-        '''
-        Gathers all the kindle formats for the book(s) and uses the KindleFormats class
-        in utlities.py to collect details about each one. Including an initialized
-        mobiProcessor object.
-        '''
-        db = self.gui.library_view.model().db
-        books_info = []
-        for book_id in book_ids:
-            title = db.get_metadata(book_id, index_is_id=True, get_user_categories=False).title
-            book = KindleFormats(book_id, db, target_formats, goal_format)
-            details = book.get_formats()
-            if details:
-                books_info.append((book_id, title, details))
-        return books_info
 
     def multi_dispatcher(self, book_ids, target_format):
         '''

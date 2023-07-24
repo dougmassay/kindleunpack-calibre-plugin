@@ -229,6 +229,22 @@ class KindleFormatDetails:
         self.__details['kindle_obj'] = mobi
         return self.__details
 
+
+def gather_kindle_formats(db, book_id, target_format, goal_format=None):
+    '''
+    Gathers all the kindle formats for the book and uses the KindleFormats class
+    in utlities.py to collect details. Including an initialized mobiProcessor object.
+    '''
+    title = db.get_metadata(book_id, index_is_id=True, get_user_categories=False).title
+    target_formats = target_format if isinstance(target_format, list) else [target_format]
+    book = KindleFormats(book_id, db, target_formats, goal_format)
+    details = book.get_formats()
+    if details:
+        return (title, details)
+
+    return None
+
+
 def build_log(failures, successes, target, goal, name):
     NOFORMAT = ENCRYPTED = NOSPECIAL = UNKNOWN = EXISTS = 0
     NOFORMAT_titles, ENCRYPTED_titles, NOSPECIAL_titles, UNKNOWN_titles, EXISTS_titles = [], [], [], [], []
