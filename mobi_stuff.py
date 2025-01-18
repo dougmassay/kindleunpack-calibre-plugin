@@ -106,7 +106,7 @@ class mobiProcessor:
         _mu.unpackBook(self.infile, outdir)
         files = os.listdir(outdir)
         pdf = ''
-        filefilter = re.compile('\.pdf$', re.IGNORECASE)
+        filefilter = re.compile(r'\.pdf$', re.IGNORECASE)
         files = filter(filefilter.search, files)
         if files:
             for filename in files:
