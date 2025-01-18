@@ -28,29 +28,31 @@ FILE_NAME = os.path.join(SCRIPT_DIR, 'KindleUnpack-{}'.format(REMOTE_URL.split('
 CORE_DIR = 'KindleUnpack-{}/lib'.format(COMMIT_SHA)
 CORE_EXCLUDES = ['askfolder_ed.py', 'mobiml2xhtml.py', 'prefs.py', 'scrolltextwidget.py']
 TARGET_DIR = os.path.join(SOURCE_DIR, 'kindleunpackcore')
+IMGHDR_URL = 'https://raw.githubusercontent.com/python/cpython/refs/tags/v3.12.8/Lib/imghdr.py'
+IMGHDR = os.path.join(TARGET_DIR, os.path.basename(IMGHDR_URL))
 
-def retrieveKindleUnpack():
-    if os.path.exists(FILE_NAME) and os.path.isfile(FILE_NAME):
-        os.remove(FILE_NAME)
+def retrieve(remote_url, file_name):
+    print('Fetching', remote_url)
     if sys.version_info >= (3,):
         def reporthook(blocknum, blocksize, totalsize):
             readsofar = blocknum * blocksize
             if totalsize > 0:
+                if readsofar > totalsize:
+                    readsofar = totalsize
                 percent = readsofar * 1e2 / totalsize
                 s = "\r%5.1f%% %*d / %d" % (
                     percent, len(str(totalsize)), readsofar, totalsize)
                 sys.stderr.write(s)
-                if readsofar >= totalsize:  # near the end
-                    sys.stderr.write("\n")
             else:  # total size is unknown
-                sys.stderr.write("read %d\n" % (readsofar,))
-        urllib.request.urlretrieve(REMOTE_URL, FILE_NAME, reporthook)
+                sys.stderr.write("\rread %d" % (readsofar,))
+        urllib.request.urlretrieve(remote_url, file_name, reporthook)
+        sys.stderr.write("\n")
     else:
-        u = urllib2.urlopen(REMOTE_URL)
+        u = urllib2.urlopen(remote_url)
         meta = u.info()
         file_size = int(meta.getheaders("Content-Length")[0])
-        with open(FILE_NAME, 'wb') as f:
-            print('Downloading: %s Bytes: %s' % (FILE_NAME, file_size))
+        with open(file_name, 'wb') as f:
+            print('Downloading: %s Bytes: %s' % (file_name, file_size))
             file_size_dl = 0
             block_sz = 8192
             while True:
@@ -62,6 +64,12 @@ def retrieveKindleUnpack():
                 status = r'%10d  [%3.2f%%]' % (file_size_dl, file_size_dl * 100. / file_size)
                 status = status + chr(8)*(len(status)+1)
                 print(status),
+
+
+def retrieveKindleUnpack():
+    if os.path.exists(FILE_NAME) and os.path.isfile(FILE_NAME):
+        os.remove(FILE_NAME)
+    retrieve(REMOTE_URL, FILE_NAME)
 
 
 retrieveKindleUnpack()
@@ -80,6 +88,12 @@ with zipfile.ZipFile(FILE_NAME) as zip_file:
             target = open(os.path.join(TARGET_DIR, name), "wb")
             with source, target:
                 shutil.copyfileobj(source, target)
+
+# The imghdr standard module was removed in Python 3.13,
+# so fetch and vendor a copy of the last version.
+if os.path.exists(IMGHDR):
+    os.path.remove(IMGHDR)
+retrieve(IMGHDR_URL, IMGHDR)
 
 # Patch kindleunpack.py, mobi_nav.py
 print('Attempting to patch KindleUnpack file(s) ...')

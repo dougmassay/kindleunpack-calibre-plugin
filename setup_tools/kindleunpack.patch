@@ -1,4 +1,4 @@
---- ./kindleunpack.py
+--- kindleunpack.py
 +++ ../kindleunpackcore/kindleunpack.py
 @@ -6,10 +6,10 @@
  
@@ -27,4 +27,31 @@
  
  # Changelog
  #  0.11 - Version by adamselene
-
+--- mobi_cover.py
++++ ../kindleunpackcore/mobi_cover.py
+@@ -8,7 +8,7 @@
+ 
+ from .unipath import pathof
+ import os
+-import imghdr
++from . import imghdr
+ 
+ import struct
+ # note:  struct pack, unpack, unpack_from all require bytestring format
+--- imghdr.py
++++ ../kindleunpackcore/imghdr.py
+@@ -1,14 +1,10 @@
+ """Recognize image file formats based on their first few bytes."""
+ 
+ from os import PathLike
+-import warnings
+ 
+ __all__ = ["what"]
+ 
+ 
+-warnings._deprecated(__name__, remove=(3, 13))
+-
+-
+ #-------------------------#
+ # Recognize image headers #
+ #-------------------------#
