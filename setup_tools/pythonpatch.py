@@ -329,7 +329,7 @@ class PatchSet(object):
         hunkparsed = False  # state after successfully parsed hunk
 
         # regexp to match start of hunk, used groups - 1,3,4,6
-        re_hunk_start = re.compile("^@@ -(\d+)(,(\d+))? \+(\d+)(,(\d+))? @@")
+        re_hunk_start = re.compile(r"^@@ -(\d+)(,(\d+))? \+(\d+)(,(\d+))? @@")
 
         self.errors = 0
         # temp buffers for header and filenames info
@@ -507,7 +507,7 @@ class PatchSet(object):
                         filenames = False
                         headscan = True
                     else:
-                        re_filename = "^\+\+\+ ([^\t]+)"
+                        re_filename = r"^\+\+\+ ([^\t]+)"
                         match = re.match(re_filename, line)
                         if not match:
                             warning("skipping invalid patch - no target filename at line %d" % lineno)
@@ -533,7 +533,7 @@ class PatchSet(object):
                             continue
 
             if hunkhead:
-                match = re.match("^@@ -(\d+)(,(\d+))? \+(\d+)(,(\d+))? @@(.*)", line)
+                match = re.match(r"^@@ -(\d+)(,(\d+))? \+(\d+)(,(\d+))? @@(.*)", line)
                 if not match:
                     if not p.hunks:
                         warning("skipping invalid patch with no hunks for file %s" % p.source)
