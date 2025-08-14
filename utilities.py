@@ -7,7 +7,14 @@ __docformat__ = 'restructuredtext en'
 
 
 import os
-from io import BytesIO as StringIO
+#from io import BytesIO as StringIO
+from io import StringIO as UnicodeIO
+try:
+    #  in python2, by StringIO we will mean a stream of byte strings
+    from StringIO import StringIO
+except ImportError:
+    #  in python3, by StringIO we mean a stream of unicode strings
+    StringIO = UnicodeIO
 from traceback import print_exc
 
 try:
