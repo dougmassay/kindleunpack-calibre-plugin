@@ -14,6 +14,8 @@ import calibre_plugins.kindleunpack_plugin.config as cfg
 import calibre_plugins.kindleunpack_plugin.kindleunpackcore.kindleunpack as _mu
 from calibre_plugins.kindleunpack_plugin.kindleunpackcore.compatibility_utils import PY2, bstr, unicode_str
 from calibre_plugins.kindleunpack_plugin.kindleunpackcore.mobi_split import mobi_split
+from calibre_plugins.kindleunpack_plugin.__init__ import PLUGIN_NAME, PLUGIN_VERSION
+from calibre.gui2 import warning_dialog
 
 
 if PY2:
@@ -136,5 +138,15 @@ class mobiProcessor:
         mobi_to_split = mobi_split(unicode_str(self.infile))
         outMobi = makeFileNames('MOBI-', self.infile, outdir)
         outKF8 = makeFileNames('KF8-', self.infile, outdir, True)
-        open(outMobi, 'wb').write(mobi_to_split.getResult7())
-        open(outKF8, 'wb').write(mobi_to_split.getResult8())
+        try:
+            open(outMobi, 'wb').write(mobi_to_split.getResult7())
+        except:
+            msg = 'Could not create MOBI portion of the split'
+            warning_dialog(None, _(PLUGIN_NAME + ' v' + PLUGIN_VERSION),
+                _(msg), show=True, show_copy_button=False)
+        try: 
+            open(outKF8, 'wb').write(mobi_to_split.getResult8())
+        except:
+            msg = 'Could not create KF8 portion of the split'
+            warning_dialog(None, _(PLUGIN_NAME + ' v' + PLUGIN_VERSION),
+                _(msg), show=True, show_copy_button=False)
