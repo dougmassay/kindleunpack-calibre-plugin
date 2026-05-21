@@ -10,12 +10,12 @@ import os
 from functools import partial
 
 try:
-    from qt.core import QMenu, QToolButton
+    from qt.core import QMenu, QToolButton, QApplication
 except ImportError:
     try:
-        from PyQt5.Qt import QMenu, QToolButton
+        from PyQt5.Qt import QMenu, QToolButton, QApplication
     except ImportError:
-        from PyQt4.Qt import QMenu, QToolButton
+        from PyQt4.Qt import QMenu, QToolButton, QApplication
 
 from calibre.gui2 import choose_dir, info_dialog, open_local_file
 from calibre.gui2.actions import InterfaceAction
@@ -48,6 +48,16 @@ class InterfacePlugin(InterfaceAction):
         self.qaction.setIcon(get_icon(cfg.PLUGIN_ICONS[0]))
         # Setup hooks so that we only enable the relevant submenus for available formats for the selection.
         self.menu.aboutToShow.connect(self.about_to_show_menu)
+
+        # Refresh icon when user switches light/dark theme.
+        # paletteChanged was introduced in Qt5.0 / calibre 2.x so is safe for all supported versions.
+        try:
+            QApplication.instance().paletteChanged.connect(self.on_palette_changed)
+        except Exception:
+            pass
+
+    def on_palette_changed(self, palette):
+        self.qaction.setIcon(get_icon(cfg.PLUGIN_ICONS[0]))
 
     def about_to_show_menu(self):
         book_ids = self.gui.library_view.get_selected_ids()

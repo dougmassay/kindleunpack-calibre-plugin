@@ -18,12 +18,12 @@ except ImportError:
 from traceback import print_exc
 
 try:
-    from qt.core import QPixmap, QIcon
+    from qt.core import QPixmap, QIcon, QApplication, QPalette
 except ImportError:
     try:
-        from PyQt5.Qt import QPixmap, QIcon
+        from PyQt5.Qt import QPixmap, QIcon, QApplication, QPalette
     except ImportError:
-        from PyQt4.Qt import QPixmap, QIcon
+        from PyQt4.Qt import QPixmap, QIcon, QApplication, QPalette
 
 from calibre.utils.config import config_dir
 from calibre.constants import iswindows
@@ -60,10 +60,32 @@ def get_icon(icon_name):
             return QIcon(pixmap)
     return QIcon()
 
+def is_dark_theme():
+    '''
+    Detect whether calibre is currently using a dark theme.
+    Compatible with Qt4, Qt5 (PyQt5) and Qt6 (qt.core).
+    Returns False if detection fails for any reason.
+    '''
+    try:
+        app = QApplication.instance()
+        if not app:
+            return False
+        palette = app.palette()
+        # Qt6 uses QPalette.ColorRole.Window; Qt5/Qt4 use QPalette.Window
+        try:
+            bg = palette.color(QPalette.ColorRole.Window)
+        except AttributeError:
+            bg = palette.color(QPalette.Window)
+        return bg.lightness() < 128
+    except Exception:
+        return False
+
 def get_pixmap(icon_name):
     '''
     Retrieve a QPixmap for the named image
     Any icons belonging to the plugin must be prefixed with 'images/'
+    Supports light/dark theme icon variants via -for-light-theme/-for-dark-theme suffix.
+    Falls back to plain filename if no themed variant exists.
     '''
     if not icon_name.startswith('images/'):
         # We know this is definitely not an icon belonging to this plugin
@@ -76,11 +98,15 @@ def get_pixmap(icon_name):
     # ...\AppData\Roaming\calibre\resources\images\Plugin Name\
     if plugin_name:
         local_images_dir = get_local_images_dir(plugin_name)
-        local_image_path = os.path.join(local_images_dir, icon_name.replace('images/', ''))
-        if os.path.exists(local_image_path):
-            pixmap = QPixmap()
-            pixmap.load(local_image_path)
-            return pixmap
+        bare_name = icon_name.replace('images/', '')
+        base, ext = os.path.splitext(bare_name)
+        theme_suffix = '-for-dark-theme' if is_dark_theme() else '-for-light-theme'
+        for candidate in [base + theme_suffix + ext, bare_name]:
+            local_image_path = os.path.join(local_images_dir, candidate)
+            if os.path.exists(local_image_path):
+                pixmap = QPixmap()
+                pixmap.load(local_image_path)
+                return pixmap
 
     # As we did not find an icon elsewhere, look within our zip resources
     if icon_name in plugin_icon_resources:
